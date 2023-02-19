@@ -1,9 +1,26 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './Slider.css';
+import Axios from 'axios';
 import Navbar from '../Imports/Navbar/Navbar';
 import Sidebar from '../Imports/Sidebar/Sidebar';
 
 const Slider = () => {
+  const formatDate = (dateString) => {
+    const options = { year: "numeric", month: "2-digit", day: "numeric", hours: "numeric", hour: '2-digit', minute: '2-digit', second: '2-digit' }
+    return new Date(dateString).toLocaleDateString(undefined, options)
+  }
+
+  const [heroList, setHeroList] = useState([]);
+  let i = 0;
+
+  // get hero item slider
+  useEffect(() => {
+    Axios.get("http://localhost:8081/api/heroitem").then((data) => {
+      console.log(data)
+      setHeroList(data.data)
+    });
+  }, []);
+
   return (
     <>
       {/* <!-- start navbar --> */}
@@ -41,14 +58,15 @@ const Slider = () => {
                           <thead class="text-left">
                             <tr>
                               <th class="pb-10 text-sm font-extrabold tracking-wide">No</th>
-                              <th class="pb-10 text-sm font-extrabold tracking-wide">customer</th>
-                              <th class="pb-10 text-sm font-extrabold tracking-wide">Product</th>
-                              <th class="pb-10 text-sm font-extrabold tracking-wide">Invoice</th>
-                              <th class="pb-10 text-sm font-extrabold tracking-wide">price</th>
-                              <th class="pb-10 text-sm font-extrabold tracking-wide">status</th>
-                              <th class="pb-10 text-sm font-extrabold tracking-wide">status</th>
-                              <th class="pb-10 text-sm font-extrabold tracking-wide">status</th>
-                              <th class="pb-10 text-sm font-extrabold tracking-wide">status</th>
+                              <th class="pb-10 text-sm font-extrabold tracking-wide">Name</th>
+                              <th class="pb-10 text-sm font-extrabold tracking-wide">Type</th>
+                              <th class="pb-10 text-sm font-extrabold tracking-wide">Image</th>
+                              <th class="pb-10 text-sm font-extrabold tracking-wide">Text</th>
+                              <th class="pb-10 text-sm font-extrabold tracking-wide">Link</th>
+                              <th class="pb-10 text-sm font-extrabold tracking-wide">Published</th>
+                              <th class="pb-10 text-sm font-extrabold tracking-wide">CreatedAt</th>
+                              <th class="pb-10 text-sm font-extrabold tracking-wide">UpdatedAt</th>
+                              <th class="pb-10 text-sm font-extrabold tracking-wide text-right">Actions</th>
                             </tr>
                           </thead>
                           {/* <!-- end table head --> */}
@@ -56,25 +74,48 @@ const Slider = () => {
                           {/* <!-- table body --> */}
                           <tbody class="text-left text-gray-600">
 
-                            <tr>
-                              <th class="mb-4 text-xs font-extrabold tracking-wider">1</th>
-                              {/* <th class="mb-4 text-xs font-extrabold tracking-wider flex flex-row items-center w-full">
+                            {/* <th class="mb-4 text-xs font-extrabold tracking-wider flex flex-row items-center w-full">
                                 <div class="w-8 h-8 overflow-hidden rounded-full">
                                   <img src="./assets/img/user2.jpg" class="object-cover" />
                                 </div>
                                 <p class="ml-3 name-1">user name</p>
                               </th> */}
-                              <th class="mb-4 text-xs font-extrabold tracking-wider">Hunuman</th>
-                              <th class="mb-4 text-xs font-extrabold tracking-wider">Nike Sport</th>
-                              <th class="mb-4 text-xs font-extrabold tracking-wider">#<span class="num-4"></span></th>
-                              <th class="mb-4 text-xs font-extrabold tracking-wider">$<span class="num-2"></span></th>
-                              <th class="mb-4 text-xs font-extrabold tracking-wider">shipped</th>
-                              <th class="mb-4 text-xs font-extrabold tracking-wider">shipped</th>
-                              <th class="mb-4 text-xs font-extrabold tracking-wider">shipped</th>
-                              <th class="mb-4 text-xs font-extrabold tracking-wider">shipped</th>
 
-                            </tr>
-                            {/* <!-- item --> */}
+                            {
+                              heroList.map((items, key) => {
+                                i++;
+                                return (
+                                  <tr key={key}>
+
+                                    <th class="mb-4 text-xs font-extrabold tracking-wider">{i} </th>
+                                    <th class="mb-4 text-xs font-extrabold tracking-wider">{(items.h_name.length < 25) ? items.h_name : items.h_name.substring(0, 25) + " ..."}</th>
+                                    <th class="mb-4 text-xs font-extrabold tracking-wider">{(items.h_type.length < 25) ? items.h_type : items.h_type.substring(0, 25) + " ..."}</th>
+                                    <th class="mb-4 text-xs font-extrabold tracking-wider">{(items.h_image.length < 25) ? items.h_image : items.h_image.substring(0, 25) + " ..."}</th>
+                                    <th class="mb-4 text-xs font-extrabold tracking-wider">{(items.h_text.length < 25) ? items.h_text : items.h_text.substring(0, 25) + " ..."}</th>
+                                    <th class="mb-4 text-xs font-extrabold tracking-wider">{(items.h_link.length < 25) ? items.h_link : items.h_link.substring(0, 25) + " ..."}</th>
+                                    <th class="mb-4 text-xs font-extrabold tracking-wider text-center">{items.published}</th>
+                                    <th class="mb-4 text-xs font-extrabold tracking-wider">{formatDate(items.createdAt)}</th>
+                                    <th class="mb-4 text-xs font-extrabold tracking-wider">{formatDate(items.updatedAt)}</th>
+                                    <th class="mb-4 text-xs font-extrabold tracking-wider text-right">
+                                      {
+                                        (items.published == 1) ? <a href="" class="mb-3 capitalize font-medium text-sm hover:text-teal-700 transition ease-in-out duration-500">
+                                          <i class="fa-solid fa-eye text-xs mr-2"></i>
+                                        </a> : <a href="" class="mb-3 capitalize font-medium text-sm hover:text-teal-700 transition ease-in-out duration-500">
+                                          <i class="fa-solid fa-eye-slash text-xs mr-2"></i>
+                                        </a>
+                                      }
+                                      <a href="" class="mb-3 capitalize font-medium text-sm hover:text-teal-700 transition ease-in-out duration-500">
+                                        <i class="fa-solid fa-pen-to-square text-xs mr-2"></i>
+                                      </a>
+                                      <a href="" class="mb-3 capitalize font-medium text-sm hover:text-teal-700 transition ease-in-out duration-500">
+                                        <i class="fa-solid fa-trash text-xs mr-2"></i>
+                                      </a>
+                                    </th>
+
+                                  </tr>
+                                );
+                              })
+                            }
 
                           </tbody>
                           {/* <!-- end table body --> */}

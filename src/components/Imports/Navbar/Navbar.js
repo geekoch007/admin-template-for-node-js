@@ -8,7 +8,7 @@ const Navbar = () => {
       {/* <!-- logo --> */}
       <div class="flex-none w-56 flex flex-row items-center">
         <img src="./assets/img/logo.png" class="w-10 flex-none" />
-        <strong class="capitalize ml-1 flex-1">cleopatra</strong>
+        <strong class="capitalize ml-1 flex-1">Male-Fashion</strong>
 
         <button id="sliderBtn" class="flex-none text-right text-gray-900 hidden md:block">
           <i class="fad fa-list-ul"></i>
@@ -45,7 +45,7 @@ const Navbar = () => {
               </div>
 
               <div class="ml-2 capitalize flex ">
-                <h1 class="text-sm text-gray-800 font-semibold m-0 p-0 leading-none">moeSaid</h1>
+                <h1 class="text-sm text-gray-800 font-semibold m-0 p-0 leading-none">KochDragon</h1>
                 <i class="fad fa-chevron-down ml-2 text-xs leading-none"></i>
               </div>
             </button>
